@@ -1,0 +1,30 @@
+require('dotenv').config();
+let express = require('express');
+let app = express();
+let sequelize = require('./db');
+
+let log = require('./controllers/logcontroller');
+let user = require('./controllers/usercontroller');
+
+sequelize.sync();
+/* ***** ERASES DB **** */
+//sequelize.sync({force: true})
+
+app.use(require('./middleware/headers'));
+
+app.use(express.json());
+
+/************************
+    * EXPOSED ROUTE *
+ ************************/
+app.use('/user', user);
+
+/*************************
+   * PROTECTED ROUTE *
+*************************/
+app.use('/log', log);
+
+
+app.listen(3000, () => {
+    console.log('App is listening on port 3000');
+})
